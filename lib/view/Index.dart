@@ -23,8 +23,8 @@ class _IndexState extends State<Index> {
       );    
   }
 
-  _removerPessoa(int id){
-      pessoaService.removerPessoa(id);
+  _removerPessoa(int id) async {
+    await pessoaService.removerPessoa(id);
   }
 
   _atualizarPessoa(int id, Pessoa pessoa){
@@ -60,6 +60,7 @@ class _IndexState extends State<Index> {
                       )),
                   Container(
                     height: 425,
+                    color: Colors.blueAccent,
                     
                     child: FutureBuilder(
                         future: _pessoas,
@@ -86,15 +87,47 @@ class _IndexState extends State<Index> {
                                       children: <Widget>[   
                                         Container(
                                           width: 250,
-                                          child: Text(pessoa.nome),
+                                          child: Text(snapshot.data[indice].nome),
                                         ),
                                          Container(
                                           width: 35,
-                                          child: IconButton(icon: Icon(Icons.edit), onPressed: _removerPessoa(pessoa.id), iconSize: 35, ),
+                                          child: IconButton(
+                                            icon: Icon(Icons.edit), 
+                                            iconSize: 35, 
+                                            onPressed: () async {
+                                              
+                                              /* setState(() {
+                                                showSpinner = true;
+                                              }); */
+                                            print("Antes do await");
+                                            await  _removerPessoa(pessoa.id);    
+                                            print("Depois do await");
+                                             /*  setState(() {
+                                                showSpinner = true;
+                                              }); */
+
+                                            } 
+                                          ),
                                         ),
                                         Container(
                                           width: 35,
-                                          child: IconButton(icon: Icon(Icons.remove_circle), onPressed: _atualizarPessoa(pessoa.id, pessoa), iconSize: 35, ),
+                                          child: IconButton(
+                                            icon: Icon(Icons.remove_circle), 
+                                            iconSize: 35,
+                                            onPressed: () async {
+                                              
+                                              /* setState(() {
+                                                showSpinner = true;
+                                              }); */
+
+                                          //  await _atualizarPessoa(pessoa.id, pessoa);    
+
+                                              /* setState(() {
+                                                showSpinner = true;
+                                              }); */
+
+                                            } 
+                                          ),
                                         ),
                                       ],  
                                     );
