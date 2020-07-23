@@ -7,9 +7,11 @@ import 'package:projeto_crud_mobile/model/Pessoa.dart';
 
 class PessoaService {
     
+  String _ipLocal = "192.168.0.26";
+
   Future<List<Pessoa>> listarPessoas() async {
     
-    String url = "http://192.168.0.26:8080/pessoa/listarApi";      
+    String url = "http://${_ipLocal}:8080/pessoa/listarApi";      
     http.Response response;
 
     response = await http.get(
@@ -38,7 +40,7 @@ class PessoaService {
   Future<Pessoa> novaPessoa(Pessoa pessoa) async{
     
     Map map = pessoa.toJson();
-    String url = "http://192.168.0.26:8080/pessoa/salvarApi";
+    String url = "http://${_ipLocal}:8080/pessoa/salvarApi";
     http.Response response;
     
     response = await http.post(
@@ -51,7 +53,7 @@ class PessoaService {
 
   void removerPessoa(int id) async{
     
-    String url = "http://192.168.0.26:8080/pessoa/${id}";    
+    String url = "http://${_ipLocal}:8080/pessoa/${id}";    
     http.Response response;
     
     response = await http.delete(
@@ -63,7 +65,7 @@ class PessoaService {
   Future<Pessoa> atualizarPessoa(int id, Pessoa pessoa) async{
    
     Map map = pessoa.toJson();
-    String url = "http://192.168.0.26:8080/pessoa/${id}";
+    String url = "http://${_ipLocal}:8080/pessoa/${id}";
 
     http.Response response;
     

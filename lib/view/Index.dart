@@ -5,7 +5,7 @@ import 'package:projeto_crud_mobile/view/FormPessoa.dart';
 
 
 class Index extends StatefulWidget {
-    
+
   @override
   _IndexState createState() => _IndexState();
 }
@@ -16,19 +16,29 @@ class _IndexState extends State<Index> {
   Future<List<Pessoa>> _pessoas;
     
   _adicionarPessoa() {    
-    Navigator.push(
+    Navigator.pushReplacement(
       context, MaterialPageRoute(
-        builder: (context) => FormPessoa()
+        builder: (context) => FormPessoa(new Pessoa.vazio())
         )
       );    
+      setState(() {
+        _pessoas = pessoaService.listarPessoas();
+      });                  
   }
 
   _removerPessoa(int id) async {
     await pessoaService.removerPessoa(id);
   }
 
-  _atualizarPessoa(int id, Pessoa pessoa){
-      pessoaService.atualizarPessoa(id, pessoa);
+  _atualizarPessoa(Pessoa pessoa){
+      Navigator.pushReplacement(
+      context, MaterialPageRoute(
+        builder: (context) => FormPessoa(pessoa)
+        )
+      );
+      setState(() {
+        _pessoas = pessoaService.listarPessoas();
+      });                  
   }
   
   @override
@@ -59,9 +69,7 @@ class _IndexState extends State<Index> {
                         ),
                       )),
                   Container(
-                    height: 425,
-                    color: Colors.blueAccent,
-                    
+                    height: 425,                                        
                     child: FutureBuilder(
                         future: _pessoas,
                         builder: (context, snapshot) {
@@ -95,17 +103,10 @@ class _IndexState extends State<Index> {
                                             icon: Icon(Icons.edit), 
                                             iconSize: 35, 
                                             onPressed: () async {
-                                              
-                                              /* setState(() {
-                                                showSpinner = true;
-                                              }); */
-                                            print("Antes do await");
-                                            await  _removerPessoa(pessoa.id);    
-                                            print("Depois do await");
-                                             /*  setState(() {
-                                                showSpinner = true;
-                                              }); */
-
+                                            await  _atualizarPessoa(pessoa);
+                                            setState(() {
+                                              _pessoas = pessoaService.listarPessoas();
+                                            });                                                   
                                             } 
                                           ),
                                         ),
@@ -114,18 +115,11 @@ class _IndexState extends State<Index> {
                                           child: IconButton(
                                             icon: Icon(Icons.remove_circle), 
                                             iconSize: 35,
-                                            onPressed: () async {
-                                              
-                                              /* setState(() {
-                                                showSpinner = true;
-                                              }); */
-
-                                          //  await _atualizarPessoa(pessoa.id, pessoa);    
-
-                                              /* setState(() {
-                                                showSpinner = true;
-                                              }); */
-
+                                            onPressed: () async {                                             
+                                            await _removerPessoa(pessoa.id);   
+                                            setState(() {
+                                              _pessoas = pessoaService.listarPessoas();
+                                            });                                              
                                             } 
                                           ),
                                         ),
@@ -140,7 +134,12 @@ class _IndexState extends State<Index> {
               )
           ),
         floatingActionButton: FloatingActionButton(
-          onPressed: _adicionarPessoa,
+          onPressed: () async {
+           await _adicionarPessoa(); 
+           setState(() {
+             _pessoas = pessoaService.listarPessoas();
+           });
+          },
           tooltip: 'Adicionar Estação',
           child: Icon(Icons.add),
         )
