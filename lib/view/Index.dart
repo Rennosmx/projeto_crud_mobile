@@ -68,8 +68,7 @@ class _IndexState extends State<Index> {
                           fontSize: 30.0,
                         ),
                       )),
-                  Container(
-                    height: 425,                                        
+                  Expanded(                                                           
                     child: FutureBuilder(
                         future: _pessoas,
                         builder: (context, snapshot) {
